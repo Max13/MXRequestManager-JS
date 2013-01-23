@@ -7,6 +7,7 @@ function MXRequestManager (method, target, data, httpUser, httpPass)
 		throw 'MXRequestManager Error: jQuery is undefined';
 
 	this.libName = 'MXRequestManager';
+	this.libVersion = 0.3;
 	this.eventName = null;
 	this.loadType = null;
 	this.method = null;
@@ -58,7 +59,7 @@ function MXRequestManager (method, target, data, httpUser, httpPass)
 				this.httpPass = (typeof (httpPass) == 'undefined') ? '' : httpPass;
 			}
 
-			this.eventName = this.libName+'Done';
+			this.eventName = 'MXDone';
 			this.ready = true;
 			return (this);
 		};
@@ -69,7 +70,7 @@ function MXRequestManager (method, target, data, httpUser, httpPass)
 		};
 
 		MXRequestManager.prototype.setEventName = function (name) {
-			this.eventName = this.libName+'Done'+name;
+			this.eventName = 'MX'+name;
 			return (this);
 		};
 
@@ -103,12 +104,12 @@ function MXRequestManager (method, target, data, httpUser, httpPass)
 				this.finished = true;
 				if (status == 'success')
 				{
-					this.response = data;
+					this.response = (data == null || data == '') ? {} : data;
 					this.response._raw = jqXHR;
 				}
 				else// if (status == 'error')
 				{
-					this.response = JSON.parse(data.responseText);
+					this.response = (data.responseText == '') ? {} : JSON.parse(data.responseText);
 					this.response._raw = data;
 				}
 				this.response._status = status;
